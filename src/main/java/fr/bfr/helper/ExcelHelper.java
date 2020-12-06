@@ -11,14 +11,13 @@ import java.util.List;
 
 public class ExcelHelper {
 
-    public static List<Object> exportXlsxData(InputStream is) {
+    public static void exportXlsxData(InputStream is) {
         try {
             Workbook workbook = new XSSFWorkbook(is);
-
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rows = sheet.iterator();
 
-            List<Object> entite = new ArrayList<Object>();
+            List<String> entite = new ArrayList<String>();
 
             int rowNumber = 0;
             while (rows.hasNext()) {
@@ -39,17 +38,17 @@ public class ExcelHelper {
                     CellType cellType = currentCell.getCellType();
                     switch (cellType) {
                         case NUMERIC:
-                            System.out.println("This cell is in numeric format");
                             long longValue = (long) currentCell.getNumericCellValue();
-                            ligne = ligne + "," + longValue;
+                            ligne = ligne + longValue;
                             break;
                         case STRING:
-                            System.out.println("This cell is in a string format");
                             String stringValue = currentCell.getStringCellValue();
-                            ligne = ligne + ", \'" + stringValue + "\'";
+                            if (cellIdx > 0) {
+                                ligne = ligne + ",";
+                            }
+                            ligne = ligne + formatToStringValue(stringValue);
                             break;
                         default:
-                            System.out.println("Unsupported format yet");
                             break;
                     }
                     cellIdx++;
@@ -57,24 +56,16 @@ public class ExcelHelper {
                 entite.add(ligne);
             }
             workbook.close();
-            return entite;
+            for (String ligne : entite) {
+                System.out.println("INSERT INTO T_SHIP() VALUES (" + ligne + ")");
+            }
+            //return entite;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
         }
     }
 
-    private void convertCellToStringFormat(Cell cell) {
-        CellType cellType = cell.getCellType();
-        switch (cellType) {
-            case NUMERIC:
-                System.out.println("This cell is in numeric format");
-                break;
-            case STRING:
-                System.out.println("This cell is in a string format");
-                break;
-            default:
-                System.out.println("Unsupported format yet");
-                break;
-        }
+    private static String formatToStringValue(String stringValue) {
+        return "\'" + stringValue + "\'";
     }
 }
