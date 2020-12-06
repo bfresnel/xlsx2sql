@@ -1,9 +1,6 @@
 package fr.bfr.helper;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
@@ -14,15 +11,14 @@ import java.util.List;
 
 public class ExcelHelper {
 
-    public static String excelToShip(InputStream is) {
-        StringBuilder sb = new StringBuilder();
+    public static List<Object> exportXlsxData(InputStream is) {
         try {
             Workbook workbook = new XSSFWorkbook(is);
 
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rows = sheet.iterator();
 
-            List<String> entite = new ArrayList<String>();
+            List<Object> entite = new ArrayList<Object>();
 
             int rowNumber = 0;
             while (rows.hasNext()) {
@@ -35,24 +31,50 @@ public class ExcelHelper {
                 }
 
                 Iterator<Cell> cellsInRow = currentRow.iterator();
-
                 String ligne = new String();
 
                 int cellIdx = 0;
                 while (cellsInRow.hasNext()) {
-                    if (cellIdx > 0) {
-                        sb.append(",");
-                    }
                     Cell currentCell = cellsInRow.next();
-                    sb.append(currentCell.getStringCellValue());
+                    CellType cellType = currentCell.getCellType();
+                    switch (cellType) {
+                        case NUMERIC:
+                            System.out.println("This cell is in numeric format");
+                            long longValue = (long) currentCell.getNumericCellValue();
+                            ligne = ligne + "," + longValue;
+                            break;
+                        case STRING:
+                            System.out.println("This cell is in a string format");
+                            String stringValue = currentCell.getStringCellValue();
+                            ligne = ligne + ", \'" + stringValue + "\'";
+                            break;
+                        default:
+                            System.out.println("Unsupported format yet");
+                            break;
+                    }
                     cellIdx++;
                 }
                 entite.add(ligne);
             }
             workbook.close();
-            return sb.toString();
+            return entite;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
+        }
+    }
+
+    private void convertCellToStringFormat(Cell cell) {
+        CellType cellType = cell.getCellType();
+        switch (cellType) {
+            case NUMERIC:
+                System.out.println("This cell is in numeric format");
+                break;
+            case STRING:
+                System.out.println("This cell is in a string format");
+                break;
+            default:
+                System.out.println("Unsupported format yet");
+                break;
         }
     }
 }

@@ -41,7 +41,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>fr.bfr.App</mainClass>
+                            <mainClass>fr.bfr.Xlsx2sql</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
