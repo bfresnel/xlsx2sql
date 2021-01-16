@@ -17,7 +17,7 @@ public class ExcelHelper {
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rows = sheet.iterator();
 
-            List<String> entite = new ArrayList<String>();
+            List<String> entite = new ArrayList<>();
 
             int rowNumber = 0;
             while (rows.hasNext()) {
@@ -30,7 +30,7 @@ public class ExcelHelper {
                 }
 
                 Iterator<Cell> cellsInRow = currentRow.iterator();
-                String ligne = new String();
+                StringBuilder ligne = new StringBuilder("");
 
                 int cellIdx = 0;
                 while (cellsInRow.hasNext()) {
@@ -39,33 +39,32 @@ public class ExcelHelper {
                     switch (cellType) {
                         case NUMERIC:
                             long longValue = (long) currentCell.getNumericCellValue();
-                            ligne = ligne + longValue;
+                            ligne.append(longValue);
                             break;
                         case STRING:
                             String stringValue = currentCell.getStringCellValue();
                             if (cellIdx > 0) {
-                                ligne = ligne + ",";
+                                ligne.append(",");
                             }
-                            ligne = ligne + formatToStringValue(stringValue);
+                            ligne.append(formatToStringValue(stringValue));
                             break;
                         default:
                             break;
                     }
                     cellIdx++;
                 }
-                entite.add(ligne);
+                entite.add(ligne.toString());
             }
             workbook.close();
             for (String ligne : entite) {
                 System.out.println("INSERT INTO T_SHIP() VALUES (" + ligne + ")");
             }
-            //return entite;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
         }
     }
 
     private static String formatToStringValue(String stringValue) {
-        return "\'" + stringValue + "\'";
+        return "'" + stringValue + "'";
     }
 }
