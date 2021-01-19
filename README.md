@@ -6,6 +6,11 @@
 
 This tool aims to easily create sql script from an xlsx file.
 
+## Requirements
+
+- Java JDK 11+
+- Apache Maven 3.6.3
+
 ## Compiling the project
 
 1. Clone the project
