@@ -17,6 +17,7 @@ This tool aims to easily create sql script from an xlsx file.
 
 
     $ cd xlsx2sql/
+    
     $ mvn clean install
 
 
