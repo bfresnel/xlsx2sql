@@ -1,12 +1,14 @@
 package fr.bfr;
 
 import fr.bfr.helper.ExcelHelper;
-
 import java.io.InputStream;
 
+/**
+ * Entry class.
+ */
 public class Xlsx2sql {
-    public static void main(String[] args) {
-        InputStream FileToRead = ClassLoader.getSystemResourceAsStream("azur_lane.xlsx");
-        ExcelHelper.exportXlsxData(FileToRead);
-    }
+  public static void main(String[] args) {
+    InputStream fileToRead = ClassLoader.getSystemResourceAsStream("azur_lane.xlsx");
+    ExcelHelper.exportXlsxData(fileToRead);
+  }
 }
