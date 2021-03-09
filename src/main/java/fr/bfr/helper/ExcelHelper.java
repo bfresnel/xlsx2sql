@@ -13,6 +13,10 @@ import java.util.List;
 
 public class ExcelHelper {
 
+    private ExcelHelper() {
+        // Avoid ExcelHelper instantiation
+    }
+
     public static final Logger logger = LoggerFactory.getLogger(ExcelHelper.class);
 
     public static void exportXlsxData(InputStream is) {
@@ -62,7 +66,7 @@ public class ExcelHelper {
             }
             workbook.close();
             for (String ligne : entite) {
-                logger.debug("INSERT INTO T_SHIP() VALUES (" + ligne + ")");
+                logger.debug("INSERT INTO T_SHIP() VALUES ({})", ligne);
             }
         } catch (IOException e) {
             throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
