@@ -5,9 +5,11 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+    branches:
+      - main
 jobs:
   build:
-    name: Build
+    name: Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
