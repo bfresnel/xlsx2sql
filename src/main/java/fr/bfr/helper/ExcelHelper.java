@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ExcelHelper {
 
-    public final static Logger logger = LoggerFactory.getLogger(ExcelHelper.class);
+    public static final Logger logger = LoggerFactory.getLogger(ExcelHelper.class);
 
     public static void exportXlsxData(InputStream is) {
         try {
