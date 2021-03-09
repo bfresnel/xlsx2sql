@@ -2,6 +2,8 @@ package fr.bfr.helper;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ExcelHelper {
+
+    public final static Logger logger = LoggerFactory.getLogger(ExcelHelper.class);
 
     public static void exportXlsxData(InputStream is) {
         try {
@@ -52,13 +56,13 @@ public class ExcelHelper {
                             break;
                     }
                     cellIdx++;
-                    
+
                 }
                 entite.add(ligne.toString());
             }
             workbook.close();
             for (String ligne : entite) {
-                System.out.println("INSERT INTO T_SHIP() VALUES (" + ligne + ")");
+                logger.debug("INSERT INTO T_SHIP() VALUES (" + ligne + ")");
             }
         } catch (IOException e) {
             throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
